@@ -21,5 +21,5 @@ export const syncDatabase = async () => {
   }
 };
 
-syncDatabase();
+// syncDatabase();
 startApplication();
