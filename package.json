@@ -2,10 +2,11 @@
   "name": "2200cc",
   "version": "1.0.0",
   "description": "",
+  "main": "index.js",
   "scripts": {
     "test": "echo 'Test N/A'",
     "build": "tsc",
-    "start": "node index",
+    "start": "node index.js",
     "start:local": "nodemon ./src/index.ts",
     "copy": "copyfiles .env dist",
     "clean": "if exist dist rmdir /s/q dist"
