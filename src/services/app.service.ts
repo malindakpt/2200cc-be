@@ -14,10 +14,10 @@ import fs from 'fs';
 
 const app = express();
 
-const credentials = {
-  key: fs.readFileSync('./cert/key.pem'),
-  cert: fs.readFileSync('./cert/cert.pem')
-};
+// const credentials = {
+//   key: fs.readFileSync('./cert/key.pem'),
+//   cert: fs.readFileSync('./cert/cert.pem')
+// };
 
 
 
@@ -65,13 +65,13 @@ app.use('/', express.static('build'))
 //   }
 // });
 
-const httpsServer = https.createServer(credentials, app);
+// const httpsServer = https.createServer(credentials, app);
 
 export const startApplication = () => {
-  app.listen(config.port, () => {
-    console.log("------------- Server Started -------------", config.port);
+  app.listen(config.httpPort, () => {
+    console.log("------------- HTTP server started -------------", config.httpPort);
   });
-  // httpsServer.listen(config.port, () => {
-  //   console.log("------------- Server Started -------------", config.port);
+  // httpsServer.listen(config.httpsPort, () => {
+  //   console.log("------------- HTTPS server started -------------", config.httpsPort);
   // });
 };

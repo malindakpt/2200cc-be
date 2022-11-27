@@ -4,9 +4,9 @@
   "description": "",
   "scripts": {
     "test": "yarn test",
-    "build": "npm run clean && tsc",
+    "build": "npm run clean && tsc && npm run copy",
     "start": "nodemon ./src/index.ts",
-    "copy": "node ./scripts/copyConfig.js",
+    "copy": "copyfiles .env dist",
     "clean": "if exist dist rmdir /s/q dist"
   },
   "repository": {
@@ -35,6 +35,7 @@
     "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "^16.18.0",
     "@types/nodemailer": "^6.4.6",
+    "copyfiles": "^2.4.1",
     "nodemon": "^2.0.19",
     "ts-node": "^10.8.2",
     "tsconfig-paths": "^4.0.0",
