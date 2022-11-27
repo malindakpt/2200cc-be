@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'vbooknode'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6C76687D3D7D401C8ED94DF02A229A65 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_746E7A6429D44E93B52D0D339A7B5B55 }}
           package: .
