@@ -2,7 +2,6 @@
   "name": "cognite-remote-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "yarn test",
     "build": "npm run clean && tsc",
