@@ -18,11 +18,6 @@ const app = express();
 //   key: fs.readFileSync('./cert/key.pem'),
 //   cert: fs.readFileSync('./cert/cert.pem')
 // };
-
-
-
-
-
 app.use(
   cors({
     credentials: true,
