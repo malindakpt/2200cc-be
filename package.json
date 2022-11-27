@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo 'Test N/A'",
     "build": "tsc",
-    "start": "nodemon ./src/index.ts",
+    "start": "node dist/index.js",
+    "start:local": "nodemon ./src/index.ts",
     "copy": "copyfiles .env dist",
     "clean": "if exist dist rmdir /s/q dist"
   },
