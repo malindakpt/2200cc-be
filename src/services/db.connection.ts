@@ -1,4 +1,4 @@
-import { config } from 'config';
+import { config } from '../config';
 import { Sequelize } from 'sequelize';
 
 // export class DB {

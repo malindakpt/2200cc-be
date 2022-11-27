@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { RecordModel } from "models/record.model";
+import { RecordModel } from "../models/record.model";
 
 export const createRecord = async (req: Request, res: Response) => {
   try {

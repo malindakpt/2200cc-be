@@ -1,4 +1,4 @@
-import { createRecord, deleteRecord, readRecords, updateRecord, readRecord } from "controllers/record.controller";
+import { createRecord, deleteRecord, readRecords, updateRecord, readRecord } from "../controllers/record.controller";
 import { Application } from "express";
 
 export const setRecordRoutes = (app: Application) => {

@@ -1,4 +1,4 @@
-import { createVehicle, deleteVehicle, readVehicles, updateVehicle, readVehicle, searchVehicles } from "controllers/vehicle.controller";
+import { createVehicle, deleteVehicle, readVehicles, updateVehicle, readVehicle, searchVehicles } from "../controllers/vehicle.controller";
 import { Application } from "express";
 
 export const setVehicleRoutes = (app: Application) => {

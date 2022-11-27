@@ -1,4 +1,4 @@
-import { DB } from 'services/db.connection';
+import { DB } from '../services/db.connection';
 import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
 export type User = InferAttributes<UserModel>;
 

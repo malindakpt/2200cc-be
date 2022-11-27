@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { User, UserModel } from "models/user.model";
+import { User, UserModel } from "../models/user.model";
 import bcrypt from "bcrypt";
-import { createAccessToken, createRefreshToken, setCookies } from "util/helper";
+import { createAccessToken, createRefreshToken, setCookies } from "../util/helper";
 import { verify } from "jsonwebtoken";
-import { config } from "config";
+import { config } from "../config";
 import { sendEmail } from "../services/mail.service";
-import { clearAllCookies } from "util/helper";
+import { clearAllCookies } from "../util/helper";
 
 const resetPasswordCodes: any = {};
 

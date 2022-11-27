@@ -1,7 +1,7 @@
 import { sign } from "jsonwebtoken";
-import { UserModel } from "models/user.model";
+import { UserModel } from "../models/user.model";
 import dotenv from "dotenv";
-import { config } from "config";
+import { config } from "../config";
 import { Response } from "express";
 
 dotenv.config();

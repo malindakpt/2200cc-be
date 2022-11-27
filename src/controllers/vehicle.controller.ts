@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { UserModel } from "models/user.model";
-import { VehicleModel } from "models/vehicle.model";
+import { UserModel } from "../models/user.model";
+import { VehicleModel } from "../models/vehicle.model";
 import { Op } from "sequelize";
 
 export const createVehicle = async (req: Request, res: Response) => {

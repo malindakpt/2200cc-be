@@ -1,4 +1,4 @@
-import { config } from "config";
+import { config } from "../config";
 import nodemailer from "nodemailer";
 
 export const sendEmail = async (

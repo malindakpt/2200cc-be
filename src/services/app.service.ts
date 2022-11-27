@@ -1,14 +1,14 @@
-import { config } from "config";
+import { config } from "../config";
 import express from "express";
 import https from 'https';
 import { setUserRoutes } from "../routes/user.routes";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { logger } from "middlewares/logger.middleware";
-import { validateToken } from "middlewares/token.middleware";
+import { logger } from "../middlewares/logger.middleware";
+import { validateToken } from "../middlewares/token.middleware";
 import cookies from "cookie-parser";
-import { setRecordRoutes } from "routes/record.routes";
-import { setVehicleRoutes } from "routes/vehicle.routes";
+import { setRecordRoutes } from "../routes/record.routes";
+import { setVehicleRoutes } from "../routes/vehicle.routes";
 import fs from 'fs';
 
 
