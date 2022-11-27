@@ -14,7 +14,7 @@ export const syncDatabase = async () => {
     await RecordModel.sync();
     
     console.log(
-      "------------- DB Connected ------------"
+      "------------- DB Connected -------------"
     );
   } catch (error) {
     console.error("Unable to connect to the database:", error);
@@ -23,6 +23,3 @@ export const syncDatabase = async () => {
 
 // syncDatabase();
 startApplication();
-
-console.log('App started')
-
