@@ -64,7 +64,7 @@ app.use('/', express.static('build'))
 
 export const startApplication = () => {
   app.listen(config.httpPort, () => {
-    console.log("------------- HTTP server started -------------", config.httpPort);
+    console.log("------------- HTTP server started ------2323-------", config.httpPort);
   });
   // httpsServer.listen(config.httpsPort, () => {
   //   console.log("------------- HTTPS server started -------------", config.httpsPort);
