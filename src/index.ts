@@ -23,3 +23,6 @@ export const syncDatabase = async () => {
 
 // syncDatabase();
 startApplication();
+
+console.log('App started')
+
