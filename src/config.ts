@@ -16,7 +16,7 @@ export const config = {
     dbLogger: true,
     fromEmail: "malindakpt@gmail.com",
     password: "ghkmmuqpneeibyis",
-    httpPort: 3600,
+    httpPort: process.env.PORT ?? 3600,
     httpsPort: 3601,
     resetPasswordDigits: 6,
     resetPasswordValidityMinutes: 1,
