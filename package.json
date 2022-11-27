@@ -1,10 +1,10 @@
 {
-  "name": "cognite-remote-backend",
+  "name": "2200cc",
   "version": "1.0.0",
   "description": "",
   "scripts": {
     "test": "yarn test",
-    "build": "npm run clean && tsc && npm run copy",
+    "build": "tsc",
     "start": "nodemon ./src/index.ts",
     "copy": "copyfiles .env dist",
     "clean": "if exist dist rmdir /s/q dist"
