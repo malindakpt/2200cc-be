@@ -1,6 +1,6 @@
 import { config } from "../config";
 import express from "express";
-import https from "https";
+import packageJson from '../../package.json';
 import { setUserRoutes } from "../routes/user.routes";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -30,11 +30,9 @@ setUserRoutes(app);
 setRecordRoutes(app);
 setVehicleRoutes(app);
 
-app.get("/status", (req, res) => {
-  res.status(200).send("<h3>App is working</h3>");
+app.get("/", (req, res) => {
+  res.status(200).send(`<h3>App is working: ${packageJson.version}</h3>`);
 });
-
-app.use("/", express.static("build"));
 
 // app.use(function (req, res, next) {
 //   res.header('Access-Control-Allow-Origin', '*');
@@ -52,7 +50,7 @@ app.use("/", express.static("build"));
 export const startApplication = () => {
   app.listen(config.httpPort, () => {
     console.log(
-      "------------- HTTP server started -------------",
+      `------------- Server started -----v: ${packageJson.version}--------`,
       config.httpPort
     );
   });
