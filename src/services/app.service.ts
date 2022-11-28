@@ -21,7 +21,8 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: "https://wonderful-grass-0bd9e6400.2.azurestaticapps.net",
+    // origin: "http://localhost:3000",
   })
 );
 // parse application/x-www-form-urlencoded
