@@ -15,7 +15,7 @@ export class VehicleModel extends Model<InferAttributes<VehicleModel>, InferCrea
 
 export const attributes = {
   id: {
-    type: DataTypes.INTEGER.UNSIGNED,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
