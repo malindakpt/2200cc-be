@@ -5,6 +5,26 @@ export class DB {
   private static sequelize: Sequelize;
 
   public static getInstance = () => {
+      if(config.isDev){
+        return this.getLocalInstance();
+      } else {
+        return this.getProdInstance();
+      }
+  };
+
+  private static getLocalInstance = () => {
+    if (!this.sequelize) {
+      this.sequelize = new Sequelize('postgres', 'postgres', config.dbPassword, {
+        logging: config.dbLogger,
+        host: 'localhost',
+        dialect:
+          'postgres' /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */
+      });
+    }
+    return this.sequelize;
+  }
+
+  private static getProdInstance = () => {
     if (!this.sequelize) {
       this.sequelize = new Sequelize({
         database: "postgres",
@@ -22,22 +42,5 @@ export class DB {
       });
     }
     return this.sequelize;
-  };
+  }
 }
-
-
-// export class DB {
-//   private static sequelize: Sequelize;
-
-//   public static getInstance = () => {
-//     if (!this.sequelize) {
-//       this.sequelize = new Sequelize('postgres', 'postgres', config.dbPassword, {
-//         logging: config.dbLogger,
-//         host: 'localhost',
-//         dialect:
-//           'postgres' /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */
-//       });
-//     }
-//     return this.sequelize;
-//   };
-// }
