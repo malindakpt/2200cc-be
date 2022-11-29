@@ -14,7 +14,7 @@ export const config = {
   resetPasswordTimeout: 120 * 1000,
 
   localFEUrl: "http//localhost:3000",
-  prodFRUrl: "https://wonderful-grass-0bd9e6400.2.azurestaticapps.net",
+  prodFEUrl: "https://wonderful-grass-0bd9e6400.2.azurestaticapps.net",
 
   dbLogger: false,
   fromEmail: "malindakpt@gmail.com",

@@ -15,7 +15,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: config.isDev ? config.localFEUrl : config.prodFRUrl,
+    origin: config.isDev ? config.prodFEUrl : config.prodFEUrl,
   })
 );
 // parse application/x-www-form-urlencoded
