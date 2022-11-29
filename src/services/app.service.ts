@@ -3,7 +3,7 @@ import express from "express";
 import packageJson from '../../package.json';
 import { setUserRoutes } from "../routes/user.routes";
 import bodyParser from "body-parser";
-// import cors from "cors";
+import cors from "cors";
 import { logger } from "../middlewares/logger.middleware";
 import { validateToken } from "../middlewares/token.middleware";
 import cookies from "cookie-parser";
@@ -12,12 +12,12 @@ import { setVehicleRoutes } from "../routes/vehicle.routes";
 
 const app = express();
 
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: config.isDev ? config.prodFEUrl : config.prodFEUrl,
-//   })
-// );
+app.use(
+  cors({
+    credentials: true,
+    origin: config.isDev ? config.prodFEUrl : config.prodFEUrl,
+  })
+);
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
@@ -34,18 +34,18 @@ app.get("/", (req, res) => {
   res.status(200).send(`<h3>App is working: ${packageJson.version}</h3>`);
 });
 
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-  res.header('Access-Control-Expose-Headers', 'Content-Length');
-  res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range');
-  if (req.method === 'OPTIONS') {
-      return res.sendStatus(200);
-  } else {
-      return next();
-  }
-});
+// app.use(function (req, res, next) {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Credentials', 'true');
+//   res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+//   res.header('Access-Control-Expose-Headers', 'Content-Length');
+//   res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range');
+//   if (req.method === 'OPTIONS') {
+//       return res.sendStatus(200);
+//   } else {
+//       return next();
+//   }
+// });
 
 export const startApplication = () => {
   app.listen(config.httpPort, () => {
