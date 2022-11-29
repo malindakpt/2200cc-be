@@ -55,7 +55,7 @@ export const attributes = {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  UserId: DataTypes.INTEGER.UNSIGNED,
+  UserId: DataTypes.INTEGER,
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE
 };
