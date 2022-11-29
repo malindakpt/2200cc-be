@@ -26,7 +26,7 @@ export class RecordModel extends Model<
 
 export const attributes = {
   id: {
-    type: DataTypes.INTEGER.UNSIGNED,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },

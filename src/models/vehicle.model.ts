@@ -15,7 +15,7 @@ export class VehicleModel extends Model<InferAttributes<VehicleModel>, InferCrea
 
 export const attributes = {
   id: {
-    type: DataTypes.INTEGER.UNSIGNED,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
@@ -55,7 +55,7 @@ export const attributes = {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  UserId: DataTypes.INTEGER.UNSIGNED,
+  UserId: DataTypes.INTEGER,
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE
 };
