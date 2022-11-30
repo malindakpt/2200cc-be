@@ -11,11 +11,11 @@ import { setRecordRoutes } from "../routes/record.routes";
 import { setVehicleRoutes } from "../routes/vehicle.routes";
 
 const app = express();
-
+// app.use(cors());
 app.use(
   cors({
-    credentials: true,
-    origin: config.isDev ? config.prodFEUrl : config.prodFEUrl,
+   credentials: true,
+    origin: config.isDev ? config.localFEUrl : config.prodFEUrl,
   })
 );
 // parse application/x-www-form-urlencoded

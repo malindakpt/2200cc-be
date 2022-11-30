@@ -13,7 +13,7 @@ export const config = {
   refreshTokenValidity: 60 * 60 * 24 * 2,
   resetPasswordTimeout: 120 * 1000,
 
-  localFEUrl: "http//localhost:3000",
+  localFEUrl: "http://localhost:3000",
   prodFEUrl: "https://wonderful-grass-0bd9e6400.2.azurestaticapps.net",
 
   dbLogger: false,
