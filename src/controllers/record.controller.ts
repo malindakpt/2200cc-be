@@ -6,6 +6,7 @@ export const createRecord = async (req: Request, res: Response) => {
     const Record = await RecordModel.create(req.body);
     return res.status(201).send(Record);
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
@@ -15,6 +16,7 @@ export const readRecord = async (req: Request, res: Response) => {
     const foundRecords = await RecordModel.findByPk(req.params.id);
     return res.status(201).send(foundRecords);
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
@@ -36,6 +38,7 @@ export const readRecords = async (req: Request, res: Response) => {
     });
     return res.status(201).send(foundRecords);
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
@@ -54,6 +57,7 @@ export const updateRecord = async (req: Request, res: Response) => {
       return res.status(404).send({});
     }
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
@@ -68,6 +72,7 @@ export const deleteRecord = async (req: Request, res: Response) => {
     });
     return res.status(201).send();
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };

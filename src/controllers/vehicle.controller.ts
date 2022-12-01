@@ -8,6 +8,7 @@ export const createVehicle = async (req: Request, res: Response) => {
     const Vehicle = await VehicleModel.create(req.body);
     return res.status(201).send(Vehicle);
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
@@ -17,6 +18,7 @@ export const readVehicle = async (req: Request, res: Response) => {
     const foundVehicles = await VehicleModel.findByPk(req.params.id);
     return res.status(201).send(foundVehicles);
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
@@ -29,6 +31,7 @@ export const readVehicles = async (req: Request, res: Response) => {
     });
     return res.status(201).send(foundVehicles);
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
@@ -47,6 +50,7 @@ export const updateVehicle = async (req: Request, res: Response) => {
       return res.status(404).send({});
     }
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
@@ -61,6 +65,7 @@ export const deleteVehicle = async (req: Request, res: Response) => {
     });
     return res.status(201).send();
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
@@ -86,6 +91,7 @@ export const searchVehicles = async (req: Request, res: Response) => {
     });
     return res.status(201).send(foundVehicles);
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };

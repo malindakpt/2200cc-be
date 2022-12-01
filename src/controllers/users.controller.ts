@@ -35,6 +35,7 @@ export const signUp = async (req: Request, res: Response) => {
 
     return res.status(201).send(responseData);
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
@@ -59,6 +60,7 @@ export const signIn = async (req: Request, res: Response) => {
 
     return res.status(200).send(foundUser);
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
@@ -89,6 +91,7 @@ export const refreshToken = async (req: Request, res: Response) => {
     await foundUser.update({ refreshToken });
     return res.status(200).send(foundUser);
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
@@ -114,6 +117,7 @@ export const logout = async (req: Request, res: Response) => {
     return res.status(200).send("Successfully logged out");
   } catch (e: any) {
     clearAllCookies(res);
+    console.error(e);
     return res.status(200).send(e.message);
   }
 };
@@ -144,6 +148,7 @@ export const sendResetCode = async (req: Request, res: Response) => {
     );
     return res.status(200).send("Reset code sent");
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
@@ -169,12 +174,8 @@ export const changePassword = async (req: Request, res: Response) => {
     await foundUser.update({ password: newPassword });
     return res.status(200).send("Password changed successfully");
   } catch (e: any) {
+    console.error(e);
     return res.status(500).send(e.message);
   }
 };
 
-export const getAllUsers = (req: Request, res: Response) => {
-  UserModel.findAll().then((result) => {
-    return res.status(200).send(result);
-  });
-};
