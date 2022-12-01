@@ -50,16 +50,19 @@ export const setCookies = (foundUser: UserModel, res: Response): string => {
 
   res.cookie("user-token", accessToken, {
     maxAge: config.refreshTokenValidity * 1000,
-    sameSite: "none"
+    sameSite: "none",
+    secure: true
   });
   res.cookie("access-token", accessToken, {
     maxAge: config.accessTokenValidity * 1000,
-    sameSite: "none"
+    sameSite: "none",
+    secure: true
   });
   res.cookie("refresh-token", refreshToken, {
     maxAge: config.refreshTokenValidity * 1000,
     httpOnly: true,
-    sameSite: "none"
+    sameSite: "none",
+    secure: true
   });
 
   return refreshToken;
