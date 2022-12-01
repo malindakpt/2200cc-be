@@ -11,6 +11,7 @@ import { setRecordRoutes } from "../routes/record.routes";
 import { setVehicleRoutes } from "../routes/vehicle.routes";
 
 const app = express();
+console.log(config.isDev? 'Development setup' : 'Production Setup');
 // app.use(cors());
 app.use(
   cors({
