@@ -44,7 +44,7 @@ export const createRefreshToken = (user: UserModel) => {
   return accessToken;
 };
 
-export const setCookies = (foundUser: UserModel, res: Response): string => {
+export const setCookies = (foundUser: UserModel, res: Response) => {
   const accessToken = createAccessToken(foundUser.toJSON());
   const refreshToken = createRefreshToken(foundUser.toJSON());
 
@@ -65,7 +65,7 @@ export const setCookies = (foundUser: UserModel, res: Response): string => {
     secure: true
   });
 
-  return refreshToken;
+  return { accessToken, refreshToken };
 };
 
 export const clearAllCookies = (res: Response) => {

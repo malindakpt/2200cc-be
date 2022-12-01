@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { User, UserModel } from "../models/user.model";
 import bcrypt from "bcrypt";
-import { createAccessToken, createRefreshToken, setCookies } from "../util/helper";
+import { setCookies } from "../util/helper";
 import { verify } from "jsonwebtoken";
 import { config } from "../config";
 import { sendEmail } from "../services/mail.service";
@@ -15,16 +15,7 @@ export const signUp = async (req: Request, res: Response) => {
     req.body.password = hash;
     const user = await UserModel.create(req.body);
 
-    const accessToken = createAccessToken(user.toJSON());
-    const refreshToken = createRefreshToken(user.toJSON());
-
-    res.cookie("access-token", accessToken, {
-      maxAge: config.accessTokenValidity * 1000,
-    });
-    res.cookie("refresh-token", refreshToken, {
-      maxAge: config.refreshTokenValidity * 1000,
-      httpOnly: true,
-    });
+    setCookies(user, res);
 
     const responseData = {
       name: user.name,
@@ -55,7 +46,7 @@ export const signIn = async (req: Request, res: Response) => {
     if (!passwordMatched) {
       return res.status(401).send("Invalid password");
     }
-    const refreshToken = setCookies(foundUser, res);
+    const { refreshToken } = setCookies(foundUser, res);
     await foundUser.update({ refreshToken });
 
     return res.status(200).send(foundUser);
@@ -73,7 +64,7 @@ export const refreshToken = async (req: Request, res: Response) => {
       where: { refreshToken: resRefreshToken },
     });
 
-    // refresh-token reuse or hacked
+    // if refresh-token reuse or hacked
     // TODO: invalidate other sessions
     if (!foundUser) {
       return res.status(401).send("User not found");
@@ -87,12 +78,31 @@ export const refreshToken = async (req: Request, res: Response) => {
       return res.status(401).send("Token ownership validation failed");
     }
 
-    const refreshToken = setCookies(foundUser, res);
+    const { refreshToken } = setCookies(foundUser, res);
     await foundUser.update({ refreshToken });
     return res.status(200).send(foundUser);
   } catch (e: any) {
     console.error(e);
     return res.status(500).send(e.message);
+  }
+};
+
+export const loggedInUser = async (req: Request, res: Response) => {
+  try {
+    const accessToken = req.cookies["access-token"];
+    const decodedUser = verify(accessToken, config.accessTokenSecret) as User;
+
+    const foundUser = await UserModel.findOne({
+      where: { id: decodedUser.id },
+    });
+
+    if (!foundUser) {
+      return res.status(500).send("User not found");
+    }
+    return res.status(200).send(decodedUser);
+  } catch (e: any) {
+    console.error(e);
+    return res.status(200).send(e.message);
   }
 };
 
@@ -178,4 +188,3 @@ export const changePassword = async (req: Request, res: Response) => {
     return res.status(500).send(e.message);
   }
 };
-
