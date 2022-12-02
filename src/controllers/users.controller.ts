@@ -60,6 +60,9 @@ export const refreshToken = async (req: Request, res: Response) => {
   try {
     const resRefreshToken = req.cookies["refresh-token"];
 
+    if (!resRefreshToken) {
+      return res.status(401).send("Refresh token not found");
+    }
     const foundUser = await UserModel.findOne({
       where: { refreshToken: resRefreshToken },
     });
@@ -90,6 +93,11 @@ export const refreshToken = async (req: Request, res: Response) => {
 export const loggedInUser = async (req: Request, res: Response) => {
   try {
     const accessToken = req.cookies["access-token"];
+
+    if (!accessToken) {
+      return res.status(401).send("Access token not found");
+    }
+
     const decodedUser = verify(accessToken, config.accessTokenSecret) as User;
 
     const foundUser = await UserModel.findOne({
@@ -109,6 +117,11 @@ export const loggedInUser = async (req: Request, res: Response) => {
 export const logout = async (req: Request, res: Response) => {
   try {
     const resRefreshToken = req.cookies["refresh-token"];
+
+    if (!resRefreshToken) {
+      return res.status(401).send("Refresh token not found");
+    }
+
     const decodedUser = verify(
       resRefreshToken,
       config.refreshTokenSecret
