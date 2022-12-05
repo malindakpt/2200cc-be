@@ -72,6 +72,9 @@ export const deleteVehicle = async (req: Request, res: Response) => {
 
 export const searchVehicles = async (req: Request, res: Response) => {
   try {
+    // TODO handle errors
+    const { offset, limit } = req.body;
+    // const where = { ...req.body };
     const where = req.body.key
       ? {
           [Op.or]: [
@@ -84,9 +87,12 @@ export const searchVehicles = async (req: Request, res: Response) => {
           ],
         }
       : {};
+
     const foundVehicles = await VehicleModel.findAll({
       where,
       order: [["updatedAt", "DESC"]],
+      offset,
+      limit,
       include: UserModel,
     });
     return res.status(201).send(foundVehicles);
