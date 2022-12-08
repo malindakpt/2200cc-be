@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { User, UserModel } from "../models/user.model";
 import bcrypt from "bcrypt";
-import { setCookies } from "../util/helper";
+import { removeSensitiveData, setCookies } from "../util/helper";
 import { verify } from "jsonwebtoken";
 import { config } from "../config";
 import { sendEmail } from "../services/mail.service";
@@ -11,18 +11,21 @@ const resetPasswordCodes: any = {};
 
 export const signUp = async (req: Request, res: Response) => {
   try {
-    const hash = await bcrypt.hash(req.body.password, 10);
+    const { identifier, password } = req.body;
+
+    // Check whether any user exist with same credentials
+    const foundUser = await UserModel.findOne({
+      where: { identifier },
+    });
+    if(foundUser) {
+      return res.status(409).send('User already exist with the email or phone number you provided');
+    }
+
+    const hash = await bcrypt.hash(password, 10);
     req.body.password = hash;
     const user = await UserModel.create(req.body);
-
-    setCookies(user, res);
-
-    const responseData = {
-      name: user.name,
-      country: user.country,
-      email: user.email,
-      phone: user.phone,
-    };
+    const responseData = removeSensitiveData(user);
+    setCookies(responseData, res);
 
     return res.status(201).send(responseData);
   } catch (e: any) {
@@ -46,10 +49,11 @@ export const signIn = async (req: Request, res: Response) => {
     if (!passwordMatched) {
       return res.status(401).send("Invalid password");
     }
-    const { refreshToken } = setCookies(foundUser, res);
+    const responseData = removeSensitiveData(foundUser);
+    const { refreshToken } = setCookies(responseData, res);
     await foundUser.update({ refreshToken });
 
-    return res.status(200).send(foundUser);
+    return res.status(200).send(responseData);
   } catch (e: any) {
     console.error(e);
     return res.status(500).send(e.message);
@@ -81,9 +85,11 @@ export const refreshToken = async (req: Request, res: Response) => {
       return res.status(401).send("Token ownership validation failed");
     }
 
-    const { refreshToken } = setCookies(foundUser, res);
+    const responseData = removeSensitiveData(foundUser);
+
+    const { refreshToken } = setCookies(responseData, res);
     await foundUser.update({ refreshToken });
-    return res.status(200).send(foundUser);
+    return res.status(200).send(responseData);
   } catch (e: any) {
     console.error(e);
     return res.status(500).send(e.message);
@@ -107,7 +113,11 @@ export const loggedInUser = async (req: Request, res: Response) => {
     if (!foundUser) {
       return res.status(500).send("User not found");
     }
-    return res.status(200).send(decodedUser);
+
+    const responseData = removeSensitiveData(foundUser);
+    setCookies(responseData, res);
+    
+    return res.status(200).send(responseData);
   } catch (e: any) {
     console.error(e);
     return res.status(200).send(e.message);
@@ -195,6 +205,7 @@ export const changePassword = async (req: Request, res: Response) => {
     }
     const newPassword = await bcrypt.hash(password, 10);
     await foundUser.update({ password: newPassword });
+
     return res.status(200).send("Password changed successfully");
   } catch (e: any) {
     console.error(e);
