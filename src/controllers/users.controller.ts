@@ -60,6 +60,25 @@ export const signIn = async (req: Request, res: Response) => {
   }
 };
 
+export const updateUser = async (req: Request, res: Response) => {
+  const { id } = req.body;
+  try {
+    const foundUser = await UserModel.findOne({
+      where: { id },
+    });
+    if (foundUser) {
+      foundUser.changed('updatedAt', true); // to forcefully update the timestamp
+      const updated = await foundUser.update(req.body);
+      return res.status(201).send(updated);
+    } else {
+      return res.status(404).send({});
+    }
+  } catch (e: any) {
+    console.error(e);
+    return res.status(500).send(e.message);
+  }
+};
+
 export const refreshToken = async (req: Request, res: Response) => {
   try {
     const resRefreshToken = req.cookies["refresh-token"];
