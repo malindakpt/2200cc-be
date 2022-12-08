@@ -1,0 +1,2 @@
+Introduce a type for sensitive info removed  user
+change DB indentifier unique

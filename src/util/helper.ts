@@ -14,39 +14,31 @@ export const getFutureTime = (date: number, periodMinutes: number) => {
   return date + periodMinutes * 60 * 1000;
 };
 
-export const createAccessToken = (user: UserModel) => {
-  const obj = {
-    id: user.id,
-    identifier: user.identifier,
-    name: user.name,
-    country: user.country,
-    email: user.email,
-    phone: user.phone,
-  };
-  const accessToken = sign(obj, config.accessTokenSecret, {
+export const removeSensitiveData = (user: UserModel) => {
+  const obj: any = user.toJSON();
+
+  delete obj.refreshToken;
+  delete obj.password;
+  return obj;
+};
+
+export const createAccessToken = (data: any) => {
+  const accessToken = sign(data, config.accessTokenSecret, {
     expiresIn: config.accessTokenValidity,
   });
   return accessToken;
 };
 
-export const createRefreshToken = (user: UserModel) => {
-  const obj = {
-    id: user.id,
-    identifier: user.identifier,
-    name: user.name,
-    country: user.country,
-    email: user.email,
-    phone: user.phone,
-  };
-  const accessToken = sign(obj, config.refreshTokenSecret, {
+export const createRefreshToken = (data: any) => {
+  const accessToken = sign(data, config.refreshTokenSecret, {
     expiresIn: config.refreshTokenValidity,
   });
   return accessToken;
 };
 
-export const setCookies = (foundUser: UserModel, res: Response) => {
-  const accessToken = createAccessToken(foundUser.toJSON());
-  const refreshToken = createRefreshToken(foundUser.toJSON());
+export const setCookies = (data: any, res: Response) => {
+  const accessToken = createAccessToken(data);
+  const refreshToken = createRefreshToken(data);
 
   res.cookie("user-token", accessToken, {
     maxAge: config.refreshTokenValidity * 1000,
