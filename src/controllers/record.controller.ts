@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { RecordModel } from "../models/record.model";
+import { getUser } from "../util/helper";
 
 export const createRecord = async (req: Request, res: Response) => {
   try {
@@ -46,10 +47,13 @@ export const readRecords = async (req: Request, res: Response) => {
 export const updateRecord = async (req: Request, res: Response) => {
   const { id } = req.body;
   try {
-    const foundRecord = await RecordModel.findOne({
-      where: { id },
-    });
+    const foundRecord = await RecordModel.findByPk(id)
     if (foundRecord) {
+      const user = getUser(req);
+      if(!user || user.id !== foundRecord.UserId){
+        return res.status(403).send('Unauthorized');
+      }
+
       foundRecord.changed('updatedAt', true);
       const updated = await foundRecord.update(req.body);
       return res.status(201).send(updated);
@@ -65,6 +69,13 @@ export const updateRecord = async (req: Request, res: Response) => {
 export const deleteRecord = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    const foundRecord = await RecordModel.findByPk(id);
+    if (foundRecord) {
+      const user = getUser(req);
+      if(!user || user.id !== foundRecord.UserId){
+        return res.status(403).send('Unauthorized');
+      }
+    }
     await RecordModel.destroy({
       where: {
         id,

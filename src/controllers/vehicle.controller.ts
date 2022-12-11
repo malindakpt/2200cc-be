@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { UserModel } from "../models/user.model";
 import { VehicleModel } from "../models/vehicle.model";
 import { Op } from "sequelize";
+import { getUser } from "../util/helper";
 
 export const createVehicle = async (req: Request, res: Response) => {
   try {
@@ -40,10 +41,14 @@ export const readVehicles = async (req: Request, res: Response) => {
 export const updateVehicle = async (req: Request, res: Response) => {
   const { id } = req.body;
   try {
-    const foundVehicle = await VehicleModel.findOne({
-      where: { id },
-    });
+    const foundVehicle = await VehicleModel.findByPk(id)
     if (foundVehicle) {
+
+      const user = getUser(req);
+      if(!user || user.id !== foundVehicle.UserId){
+        return res.status(403).send('Unauthorized');
+      }
+
       foundVehicle.changed("updatedAt", true);
       const updated = await foundVehicle.update(req.body);
       return res.status(201).send(updated);
@@ -59,6 +64,15 @@ export const updateVehicle = async (req: Request, res: Response) => {
 export const deleteVehicle = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+
+    const foundVehicle = await VehicleModel.findByPk(id);
+    if (foundVehicle) {
+      const user = getUser(req);
+      if(!user || user.id !== foundVehicle.UserId){
+        return res.status(403).send('Unauthorized');
+      }
+    }
+
     await VehicleModel.destroy({
       where: {
         id,
