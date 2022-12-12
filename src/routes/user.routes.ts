@@ -1,5 +1,5 @@
 import { Application } from "express";
-import { signUp, signIn, refreshToken, logout, sendResetCode, changePassword, loggedInUser, allUsers } from "../controllers/users.controller";
+import { signUp, signIn, refreshToken, logout, sendResetCode, changePassword, loggedInUser, allUsers, updateUser } from "../controllers/users.controller";
 
 export const setUserRoutes = (app: Application) => {
     app.post('/user/signUp', [signUp]);

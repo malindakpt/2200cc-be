@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { User, UserModel } from "../models/user.model";
 import bcrypt from "bcrypt";
-import { getUser, setCookies } from "../util/helper";
+import { getUser, removeSensitiveData, setCookies } from "../util/helper";
 import { verify } from "jsonwebtoken";
 import { config } from "../config";
 import { sendEmail } from "../services/mail.service";
