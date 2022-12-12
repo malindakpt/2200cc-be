@@ -1,5 +1,5 @@
 import { Application } from "express";
-import { signUp, signIn, refreshToken, logout, sendResetCode, changePassword, loggedInUser, updateUser } from "../controllers/users.controller";
+import { signUp, signIn, refreshToken, logout, sendResetCode, changePassword, loggedInUser, allUsers } from "../controllers/users.controller";
 
 export const setUserRoutes = (app: Application) => {
     app.post('/user/signUp', [signUp]);
@@ -8,6 +8,7 @@ export const setUserRoutes = (app: Application) => {
     app.post('/user/refreshToken', [refreshToken]);
     app.post('/user/loggedInUser', [loggedInUser]);
     app.post('/user/logout', [logout]);
+    app.post('/user/all', [allUsers]);
     app.post('/user/sendResetCode', [sendResetCode]);
     app.post('/user/changePassword', [changePassword]);
     // app.post('/user/reset/email', [resetPassordToEmail]);

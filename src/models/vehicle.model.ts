@@ -43,6 +43,10 @@ export const attributes = {
     type: DataTypes.INTEGER,
     allowNull: false
   },
+  cc: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
   transmission: {
     type: DataTypes.INTEGER,
     allowNull: false

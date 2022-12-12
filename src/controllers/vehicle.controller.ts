@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { UserModel } from "../models/user.model";
 import { VehicleModel } from "../models/vehicle.model";
 import { Op } from "sequelize";
+import { getUser } from "../util/helper";
+import { config } from "../config";
 
 export const createVehicle = async (req: Request, res: Response) => {
   try {
@@ -28,7 +30,7 @@ export const readVehicles = async (req: Request, res: Response) => {
     const foundVehicles = await VehicleModel.findAll({
       where: req.body,
       order: [["updatedAt", "DESC"]],
-      include: UserModel,
+      include: UserModel
     });
     return res.status(201).send(foundVehicles);
   } catch (e: any) {
@@ -40,10 +42,14 @@ export const readVehicles = async (req: Request, res: Response) => {
 export const updateVehicle = async (req: Request, res: Response) => {
   const { id } = req.body;
   try {
-    const foundVehicle = await VehicleModel.findOne({
-      where: { id },
-    });
+    const foundVehicle = await VehicleModel.findByPk(id)
     if (foundVehicle) {
+
+      const user = getUser(req);
+      if(!user || user.id !== foundVehicle.UserId){
+        return res.status(403).send('Unauthorized');
+      }
+
       foundVehicle.changed("updatedAt", true);
       const updated = await foundVehicle.update(req.body);
       return res.status(201).send(updated);
@@ -59,6 +65,15 @@ export const updateVehicle = async (req: Request, res: Response) => {
 export const deleteVehicle = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+
+    const foundVehicle = await VehicleModel.findByPk(id);
+    if (foundVehicle) {
+      const user = getUser(req);
+      if(!user || user.id !== foundVehicle.UserId){
+        return res.status(403).send('Unauthorized');
+      }
+    }
+
     await VehicleModel.destroy({
       where: {
         id,
@@ -70,7 +85,6 @@ export const deleteVehicle = async (req: Request, res: Response) => {
     return res.status(500).send(e.message);
   }
 };
-
 export const searchVehicles = async (req: Request, res: Response) => {
   try {
     // TODO handle errors
@@ -102,3 +116,25 @@ export const searchVehicles = async (req: Request, res: Response) => {
     return res.status(500).send(e.message);
   }
 };
+
+export const allVehicles = async (req: Request, res: Response) => {
+  try {
+    const { offset, limit } = req.body;
+    const user = getUser(req);
+    if(user?.id !== config.adminUserId){
+      return res.status(403).send('Unauthorized');
+    }
+
+    const foundUsers = await VehicleModel.findAll({
+      order: [["createdAt", "DESC"]],
+      offset,
+      limit,
+    });
+
+    return res.status(201).send(foundUsers);
+  }
+  catch (e: any) {
+    console.error(e);
+    return res.status(500).send(e.message);
+  }
+}

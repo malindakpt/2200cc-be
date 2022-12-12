@@ -1,8 +1,8 @@
-import { sign } from "jsonwebtoken";
-import { UserModel } from "../models/user.model";
+import { sign, verify } from "jsonwebtoken";
+import { User, UserModel } from "../models/user.model";
 import dotenv from "dotenv";
 import { config } from "../config";
-import { Response } from "express";
+import { Response, Request } from "express";
 
 dotenv.config();
 
@@ -65,3 +65,16 @@ export const clearAllCookies = (res: Response) => {
   res.clearCookie("access-token");
   res.clearCookie("refresh-token");
 };
+
+export const getUser = (req: Request) => {
+  try{
+    const accessToken = req.cookies["access-token"];
+    const decodedUser = verify(
+      accessToken,
+      config.accessTokenSecret
+    ) as User;
+    return decodedUser;
+  } catch (e: any) {
+    return null;
+  }
+}
