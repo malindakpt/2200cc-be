@@ -3,6 +3,7 @@ import { UserModel } from "../models/user.model";
 import { VehicleModel } from "../models/vehicle.model";
 import { Op } from "sequelize";
 import { getUser } from "../util/helper";
+import { config } from "../config";
 
 export const createVehicle = async (req: Request, res: Response) => {
   try {
@@ -84,7 +85,6 @@ export const deleteVehicle = async (req: Request, res: Response) => {
     return res.status(500).send(e.message);
   }
 };
-
 export const searchVehicles = async (req: Request, res: Response) => {
   try {
     // TODO handle errors
@@ -116,3 +116,25 @@ export const searchVehicles = async (req: Request, res: Response) => {
     return res.status(500).send(e.message);
   }
 };
+
+export const allVehicles = async (req: Request, res: Response) => {
+  try {
+    const { offset, limit } = req.body;
+    const user = getUser(req);
+    if(user?.id !== config.adminUserId){
+      return res.status(403).send('Unauthorized');
+    }
+
+    const foundUsers = await VehicleModel.findAll({
+      order: [["createdAt", "DESC"]],
+      offset,
+      limit,
+    });
+
+    return res.status(201).send(foundUsers);
+  }
+  catch (e: any) {
+    console.error(e);
+    return res.status(500).send(e.message);
+  }
+}

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { config } from "../config";
 import { RecordModel } from "../models/record.model";
 import { getUser } from "../util/helper";
 
@@ -87,3 +88,25 @@ export const deleteRecord = async (req: Request, res: Response) => {
     return res.status(500).send(e.message);
   }
 };
+
+export const allRecords = async (req: Request, res: Response) => {
+  try {
+    const { offset, limit } = req.body;
+    const user = getUser(req);
+    if(user?.id !== config.adminUserId){
+      return res.status(403).send('Unauthorized');
+    }
+
+    const foundUsers = await RecordModel.findAll({
+      order: [["createdAt", "DESC"]],
+      offset,
+      limit,
+    });
+
+    return res.status(201).send(foundUsers);
+  }
+  catch (e: any) {
+    console.error(e);
+    return res.status(500).send(e.message);
+  }
+}

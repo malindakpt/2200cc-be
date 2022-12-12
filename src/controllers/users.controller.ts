@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { User, UserModel } from "../models/user.model";
 import bcrypt from "bcrypt";
-import { setCookies } from "../util/helper";
+import { getUser, setCookies } from "../util/helper";
 import { verify } from "jsonwebtoken";
 import { config } from "../config";
 import { sendEmail } from "../services/mail.service";
@@ -55,6 +55,28 @@ export const signIn = async (req: Request, res: Response) => {
     return res.status(500).send(e.message);
   }
 };
+
+export const allUsers = async (req: Request, res: Response) => {
+  try {
+    const { offset, limit } = req.body;
+    const user = getUser(req);
+    if(user?.id !== config.adminUserId){
+      return res.status(403).send('Unauthorized');
+    }
+
+    const foundUsers = await UserModel.findAll({
+      order: [["createdAt", "DESC"]],
+      offset,
+      limit,
+    });
+
+    return res.status(201).send(foundUsers);
+  }
+  catch (e: any) {
+    console.error(e);
+    return res.status(500).send(e.message);
+  }
+}
 
 export const refreshToken = async (req: Request, res: Response) => {
   try {
