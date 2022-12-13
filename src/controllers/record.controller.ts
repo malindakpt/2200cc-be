@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { config } from "../config";
 import { RecordModel } from "../models/record.model";
+import { VehicleModel } from "../models/vehicle.model";
 import { getUser } from "../util/helper";
 
 export const createRecord = async (req: Request, res: Response) => {
@@ -15,8 +16,11 @@ export const createRecord = async (req: Request, res: Response) => {
 
 export const readRecord = async (req: Request, res: Response) => {
   try {
-    const foundRecords = await RecordModel.findByPk(req.params.id);
-    return res.status(201).send(foundRecords);
+    const foundRecord = await RecordModel.findByPk(req.params.id, {
+      include: VehicleModel
+    });
+
+    return res.status(201).send(foundRecord);
   } catch (e: any) {
     console.error(e);
     return res.status(500).send(e.message);

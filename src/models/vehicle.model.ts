@@ -55,6 +55,7 @@ export const attributes = {
     type: DataTypes.STRING,
     allowNull: false
   },
+  hidden: DataTypes.BOOLEAN,
   imageCount: {
     type: DataTypes.INTEGER,
     allowNull: false,

@@ -85,6 +85,7 @@ export const deleteVehicle = async (req: Request, res: Response) => {
     return res.status(500).send(e.message);
   }
 };
+
 export const searchVehicles = async (req: Request, res: Response) => {
   try {
     // TODO handle errors
