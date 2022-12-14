@@ -23,9 +23,11 @@ export const signUp = async (req: Request, res: Response) => {
 
     const hash = await bcrypt.hash(password, 10);
     req.body.password = hash;
-    const user = await UserModel.create(req.body);
-    const responseData = removeSensitiveData(user);
-    setCookies(responseData, res);
+    const createdUser = await UserModel.create(req.body);
+    const responseData = removeSensitiveData(createdUser);
+    const {refreshToken} = setCookies(responseData, res);
+
+    await createdUser.update({ refreshToken });
 
     return res.status(201).send(responseData);
   } catch (e: any) {
@@ -103,33 +105,37 @@ export const allUsers = async (req: Request, res: Response) => {
 
 export const refreshToken = async (req: Request, res: Response) => {
   try {
-    const resRefreshToken = req.cookies["refresh-token"];
+    const refreshToken = req.cookies["refresh-token"];
 
-    if (!resRefreshToken) {
+    if (!refreshToken) {
       return res.status(401).send("Refresh token not found");
     }
+
+    const decodedUser = verify(
+      refreshToken,
+      config.refreshTokenSecret
+    ) as User;
+
     const foundUser = await UserModel.findOne({
-      where: { refreshToken: resRefreshToken },
+      where: { refreshToken },
     });
 
     // if refresh-token reuse or hacked
     // TODO: invalidate other sessions
     if (!foundUser) {
+      console.log('old', refreshToken);
       return res.status(401).send("User not found");
     }
-    const decodedUser = verify(
-      resRefreshToken,
-      config.refreshTokenSecret
-    ) as User;
 
-    if (decodedUser.name !== foundUser.name) {
+    if (decodedUser.id !== foundUser.id) {
       return res.status(401).send("Token ownership validation failed");
     }
 
     const responseData = removeSensitiveData(foundUser);
 
-    const { refreshToken } = setCookies(responseData, res);
-    await foundUser.update({ refreshToken });
+    const { refreshToken: newRefreshToken } = setCookies(responseData, res);
+    await foundUser.update({ refreshToken: newRefreshToken });
+    console.log('new', newRefreshToken);
     return res.status(200).send(responseData);
   } catch (e: any) {
     console.error(e);
@@ -156,7 +162,7 @@ export const loggedInUser = async (req: Request, res: Response) => {
     }
 
     const responseData = removeSensitiveData(foundUser);
-    setCookies(responseData, res);
+    // setCookies(responseData, res);
     
     return res.status(200).send(responseData);
   } catch (e: any) {
@@ -178,9 +184,7 @@ export const logout = async (req: Request, res: Response) => {
       config.refreshTokenSecret
     ) as User;
 
-    const foundUser = await UserModel.findOne({
-      where: { id: decodedUser.id },
-    });
+    const foundUser = await UserModel.findByPk(decodedUser.id);
 
     if (!foundUser) {
       return res.status(500).send("User not found");
@@ -200,9 +204,7 @@ export const sendResetCode = async (req: Request, res: Response) => {
   try {
     const { identifier } = req.body;
 
-    const foundUser = await UserModel.findOne({
-      where: { identifier },
-    });
+    const foundUser = await UserModel.findByPk(identifier);
 
     if (!foundUser) {
       return res.status(500).send("User does not exist");
