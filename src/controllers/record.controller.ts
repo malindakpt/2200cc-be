@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Op } from "sequelize";
 import { config } from "../config";
 import { RecordModel } from "../models/record.model";
+import { UserModel } from "../models/user.model";
 import { VehicleModel } from "../models/vehicle.model";
 import { getUser } from "../util/helper";
 
@@ -18,7 +19,7 @@ export const createRecord = async (req: Request, res: Response) => {
 export const readRecord = async (req: Request, res: Response) => {
   try {
     const foundRecord = await RecordModel.findByPk(req.params.id, {
-      include: VehicleModel
+      include: [VehicleModel, UserModel]
     });
 
     return res.status(201).send(foundRecord);

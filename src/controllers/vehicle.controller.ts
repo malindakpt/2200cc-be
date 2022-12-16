@@ -4,6 +4,8 @@ import { VehicleModel } from "../models/vehicle.model";
 import { Op } from "sequelize";
 import { getUser } from "../util/helper";
 import { config } from "../config";
+import { RecordModel } from "../models/record.model";
+import { DB } from "../services/db.connection";
 
 export const createVehicle = async (req: Request, res: Response) => {
   try {
@@ -88,7 +90,7 @@ export const deleteVehicle = async (req: Request, res: Response) => {
   }
 };
 
-export const searchVehicles = async (req: Request, res: Response) => {
+export const searchVehicles2 = async (req: Request, res: Response) => {
   try {
     // TODO handle errors
     const { offset, limit } = req.body;
@@ -114,6 +116,29 @@ export const searchVehicles = async (req: Request, res: Response) => {
       include: UserModel,
     });
     return res.status(201).send(foundVehicles);
+  } catch (e: any) {
+    console.error(e);
+    return res.status(500).send(e.message);
+  }
+};
+
+export const searchVehicles = async (req: Request, res: Response) => {
+  try {
+    // TODO handle errors
+    const { offset, limit, key } = req.body;
+ 
+    const query = `
+    (SELECT * FROM (select * from public."Vehicles" where "regNo" like '%${key}%' or "chassis" like '%${key}%') V
+    JOIN 
+    (SELECT "VehicleId", count("VehicleId") recordCnt from public."Records" group by "VehicleId") R
+    ON V."id" = R."VehicleId")
+    offset ${offset}
+    limit ${limit}`
+
+    const [results, metadata] = await DB.getInstance().query(query);
+
+    
+    return res.status(201).send(results);
   } catch (e: any) {
     console.error(e);
     return res.status(500).send(e.message);

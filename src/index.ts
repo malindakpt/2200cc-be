@@ -6,6 +6,8 @@ import { startApplication } from "./services/app.service";
 export const syncDatabase = async () => {
   try {
     VehicleModel.belongsTo(UserModel);
+    VehicleModel.hasMany(RecordModel);
+    UserModel.hasMany(VehicleModel);
     RecordModel.belongsTo(UserModel);
     RecordModel.belongsTo(VehicleModel);
 
