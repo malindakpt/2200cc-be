@@ -128,12 +128,17 @@ export const searchVehicles = async (req: Request, res: Response) => {
     const { offset, limit, key } = req.body;
  
     const query = `
-    (SELECT * FROM (select * from public."Vehicles" where "regNo" like '%${key}%' or "chassis" like '%${key}%') V
-    JOIN 
+    SELECT * FROM (select * from public."Vehicles" where "regNo" like '%${key}%' or "chassis" like '%${key}%') V
+    LEFT JOIN 
     (SELECT "VehicleId", count("VehicleId") recordCnt from public."Records" group by "VehicleId") R
-    ON V."id" = R."VehicleId")
+    ON V."id" = R."VehicleId"
+    LEFT JOIN
+    (SELECT "name" ownerName, id UserId from public."Users") U 
+    ON V."UserId" = U.UserId
+    ORDER BY "createdAt" DESC
     offset ${offset}
-    limit ${limit}`
+    limit ${limit}
+    `
 
     const [results, metadata] = await DB.getInstance().query(query);
 

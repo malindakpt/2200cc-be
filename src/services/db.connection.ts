@@ -16,7 +16,7 @@ export class DB {
     console.log("local DB");
     if (!this.sequelize) {
       this.sequelize = new Sequelize(
-        "rimcup",
+        "postgres",
         "postgres",
         config.dbPassword,
         {
