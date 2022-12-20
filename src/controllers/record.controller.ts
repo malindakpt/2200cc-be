@@ -32,11 +32,13 @@ export const readRecord = async (req: Request, res: Response) => {
 export const readRecords = async (req: Request, res: Response) => {
   try {
     // TODO handle errors
-    const { offset, limit } = req.body;
-    const where = { ...req.body };
-
-    delete where.offset;
-    delete where.limit;
+    const { offset, limit, VehicleId, recordTypes } = req.body;
+    const where = { 
+      VehicleId,
+      type: {
+        [Op.or]: recordTypes
+      }
+     };
 
     const foundRecords = await RecordModel.findAll({
       where,
@@ -124,10 +126,12 @@ export const searchRecords = async (req: Request, res: Response) => {
     const { offset, limit, regNo, chassis } = req.body;
 
     const foundVehicles = await RecordModel.findAll({
-      where: {[Op.or]: [
-        {  '$Vehicle.regNo$': regNo },
-        {  '$Vehicle.chassis$': chassis}
-      ]},
+      where: {
+          [Op.or]: [
+            {  '$Vehicle.regNo$': regNo },
+            {  '$Vehicle.chassis$': chassis}
+          ]
+      },
       order: [["date", "DESC"]],
       offset,
       limit,
