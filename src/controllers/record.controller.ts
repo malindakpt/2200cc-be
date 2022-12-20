@@ -123,14 +123,17 @@ export const allRecords = async (req: Request, res: Response) => {
 export const searchRecords = async (req: Request, res: Response) => {
   try {
     // TODO handle errors
-    const { offset, limit, regNo, chassis } = req.body;
+    const { offset, limit, regNo, chassis, recordTypes } = req.body;
 
     const foundVehicles = await RecordModel.findAll({
       where: {
           [Op.or]: [
             {  '$Vehicle.regNo$': regNo },
             {  '$Vehicle.chassis$': chassis}
-          ]
+          ],
+          type: {
+            [Op.or]: recordTypes
+          }
       },
       order: [["date", "DESC"]],
       offset,
