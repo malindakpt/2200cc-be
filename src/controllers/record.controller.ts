@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
+import { Op } from "sequelize";
 import { config } from "../config";
 import { RecordModel } from "../models/record.model";
+import { UserModel } from "../models/user.model";
+import { VehicleModel } from "../models/vehicle.model";
 import { getUser } from "../util/helper";
 
 export const createRecord = async (req: Request, res: Response) => {
@@ -15,8 +18,11 @@ export const createRecord = async (req: Request, res: Response) => {
 
 export const readRecord = async (req: Request, res: Response) => {
   try {
-    const foundRecords = await RecordModel.findByPk(req.params.id);
-    return res.status(201).send(foundRecords);
+    const foundRecord = await RecordModel.findByPk(req.params.id, {
+      include: [VehicleModel, UserModel]
+    });
+
+    return res.status(201).send(foundRecord);
   } catch (e: any) {
     console.error(e);
     return res.status(500).send(e.message);
@@ -26,17 +32,20 @@ export const readRecord = async (req: Request, res: Response) => {
 export const readRecords = async (req: Request, res: Response) => {
   try {
     // TODO handle errors
-    const { offset, limit } = req.body;
-    const where = { ...req.body };
-
-    delete where.offset;
-    delete where.limit;
+    const { offset, limit, VehicleId, recordTypes } = req.body;
+    const where = { 
+      VehicleId,
+      type: {
+        [Op.or]: recordTypes
+      }
+     };
 
     const foundRecords = await RecordModel.findAll({
       where,
       order: [["date", "DESC"]],
       offset,
       limit,
+      
     });
     return res.status(201).send(foundRecords);
   } catch (e: any) {
@@ -110,3 +119,33 @@ export const allRecords = async (req: Request, res: Response) => {
     return res.status(500).send(e.message);
   }
 }
+
+export const searchRecords = async (req: Request, res: Response) => {
+  try {
+    // TODO handle errors
+    const { offset, limit, regNo, chassis, recordTypes } = req.body;
+
+    const foundVehicles = await RecordModel.findAll({
+      where: {
+          [Op.or]: [
+            {  '$Vehicle.regNo$': regNo },
+            {  '$Vehicle.chassis$': chassis}
+          ],
+          type: {
+            [Op.or]: recordTypes
+          }
+      },
+      order: [["date", "DESC"]],
+      offset,
+      limit,
+      include: [{
+        model: VehicleModel,
+        as: 'Vehicle'
+      }],
+    });
+    return res.status(201).send(foundVehicles);
+  } catch (e: any) {
+    console.error(e);
+    return res.status(500).send(e.message);
+  }
+};

@@ -34,6 +34,28 @@ export class DB {
     console.log("remote DB");
     if (!this.sequelize) {
       this.sequelize = new Sequelize({
+        database: "rimcup",
+        username: "rimcupadmin",
+        password: "abcd1234@",
+        logging: config.dbLogger,
+        host: "rimcup.database.windows.net",
+        // port: 5432,
+        dialect: "mssql",
+        dialectOptions: {
+          ssl: {
+            require: true, // This will help you. But you will see nwe error
+            rejectUnauthorized: false, // This line will fix new error
+          },
+        },
+      });
+    }
+    return this.sequelize;
+  };
+
+  private static getProdInstancePostgres = () => {
+    console.log("remote DB");
+    if (!this.sequelize) {
+      this.sequelize = new Sequelize({
         database: "postgres",
         username: "vbookadmin",
         password: "abcd1234@",

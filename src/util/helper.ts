@@ -40,7 +40,7 @@ export const setCookies = (data: any, res: Response) => {
   const accessToken = createAccessToken(data);
   const refreshToken = createRefreshToken(data);
 
-  res.cookie("user-token", accessToken, {
+  res.cookie("user-token", refreshToken, {
     maxAge: config.refreshTokenValidity * 1000,
     sameSite: "none",
     secure: true
@@ -56,7 +56,6 @@ export const setCookies = (data: any, res: Response) => {
     sameSite: "none",
     secure: true
   });
-
   return { accessToken, refreshToken };
 };
 
