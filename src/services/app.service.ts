@@ -32,7 +32,7 @@ setRecordRoutes(app);
 setVehicleRoutes(app);
 
 app.get("/", (req, res) => {
-  res.status(200).send(`<h3>App is working: ${packageJson.version}</h3>`);
+  res.status(200).send(`<h3>App is working: ${packageJson.version} on ${new Date().toString()}</h3>`);
 });
 
 // app.use(function (req, res, next) {
