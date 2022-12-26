@@ -5,6 +5,6 @@ export const addCacheHeaders = (
   res: Response,
   next: NextFunction
 ) => {
-  res.set('Cache-control', 'private, max-age=300');
+  res.set('Cache-control', 'private, max-age=3600');
   return next();
 };

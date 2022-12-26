@@ -6,8 +6,8 @@ export const setVehicleRoutes = (app: Application) => {
     app.post('/vehicle/delete/:id', [deleteVehicle]);
     app.post('/vehicle/update', [updateVehicle]);
     app.post('/vehicle/create', [createVehicle]);
-    app.get('/vehicle/list', [readVehicles, addCacheHeaders]);
-    app.get('/vehicle/all', [allVehicles, addCacheHeaders]);
-    app.get('/vehicle/search', [searchVehicles, addCacheHeaders]);
-    app.get('/vehicle/:id', [readVehicle, addCacheHeaders]);
+    app.get('/vehicle/list', [addCacheHeaders, readVehicles]);
+    app.get('/vehicle/all', [allVehicles]);
+    app.get('/vehicle/search', [searchVehicles]);
+    app.get('/vehicle/:id', [addCacheHeaders, readVehicle]);
 }
