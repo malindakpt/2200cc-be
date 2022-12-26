@@ -6,8 +6,8 @@ export const setRecordRoutes = (app: Application) => {
     app.post('/record/delete/:id', [deleteRecord]);
     app.post('/record/update', [updateRecord]);
     app.post('/record/create', [createRecord]);
-    app.get('/record/list', [addCacheHeaders, readRecords]);
-    app.get('/record/all', [addCacheHeaders, allRecords]);
-    app.get('/record/search', [addCacheHeaders, searchRecords]);
-    app.get('/record/:id', [addCacheHeaders, readRecord]);
+    app.get('/record/list', [readRecords]);
+    app.get('/record/all', [allRecords]);
+    app.get('/record/search', [searchRecords]);
+    app.get('/record/:id', [readRecord]);
 }
