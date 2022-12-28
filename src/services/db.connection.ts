@@ -6,9 +6,9 @@ export class DB {
 
   public static getInstance = () => {
     if (config.isDev) {
-      return this.getLocalInstance();
+      return this.getProdHerokuInstance();
     } else {
-      return this.getProdInstance();
+      return this.getProdHerokuInstance();
     }
   };
 
@@ -30,7 +30,29 @@ export class DB {
     return this.sequelize;
   };
 
-  private static getProdInstance = () => {
+  private static getProdHerokuInstance = () => {
+    console.log("remote DB");
+    if (!this.sequelize) {
+      this.sequelize = new Sequelize({
+        database: "dbiv7dpt7ae1d2",
+        username: "xndblagfangjqe",
+        password: "27bc64364152c5d5814cf40e829b5749a3872fec2e3a64991c31b6571f7f7cfd",
+        logging: config.dbLogger,
+        host: "ec2-3-225-213-67.compute-1.amazonaws.com",
+        port: 5432,
+        dialect: "postgres",
+        dialectOptions: {
+          ssl: {
+            require: true, // This will help you. But you will see nwe error
+            rejectUnauthorized: false, // This line will fix new error
+          },
+        },
+      });
+    }
+    return this.sequelize;
+  };
+
+  private static getProdAzureInstance = () => {
     console.log("remote DB");
     if (!this.sequelize) {
       this.sequelize = new Sequelize({
