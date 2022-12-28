@@ -19,7 +19,7 @@ export class RecordModel extends Model<
   declare type: number;
   declare millage: number;
   declare desc: string;
-  declare imageCount: number;
+  declare images: string;
 
   declare UserId?: number;
   declare createdAt?: Date;
@@ -48,10 +48,7 @@ export const attributes = {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  imageCount: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
+  images: DataTypes.STRING,
 
   UserId: DataTypes.INTEGER,
   createdAt: DataTypes.DATE,

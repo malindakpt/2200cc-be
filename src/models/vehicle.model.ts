@@ -8,7 +8,7 @@ export class VehicleModel extends Model<InferAttributes<VehicleModel>, InferCrea
   declare id: CreationOptional<number>;
   declare regNo: string;
   declare millage: number;
-  declare imageCount: number;
+  declare images: string;
   declare createdAt?: Date;
   declare updatedAt?: Date;
   declare UserId?: number;
@@ -61,10 +61,7 @@ export const attributes = {
     allowNull: false
   },
   hidden: DataTypes.BOOLEAN,
-  imageCount: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
+  images: DataTypes.STRING,
   UserId: DataTypes.INTEGER,
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE

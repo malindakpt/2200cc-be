@@ -6,7 +6,7 @@ export class DB {
 
   public static getInstance = () => {
     if (config.isDev) {
-      return this.getProdHerokuInstance();
+      return this.getLocalInstance();
     } else {
       return this.getProdHerokuInstance();
     }
