@@ -20,7 +20,7 @@ export const createVehicle = async (req: Request, res: Response) => {
 export const readVehicle = async (req: Request, res: Response) => {
   try {
     const foundVehicles = await VehicleModel.findByPk(req.params.id, {
-      include: UserModel
+      include: UserModel,
     });
     return res.status(201).send(foundVehicles);
   } catch (e: any) {
@@ -31,10 +31,12 @@ export const readVehicle = async (req: Request, res: Response) => {
 
 export const readVehicles = async (req: Request, res: Response) => {
   try {
+    const { UserId } = req.query;
+
     const foundVehicles = await VehicleModel.findAll({
-      where: req.body,
+      where: { UserId: Number(UserId) },
       order: [["updatedAt", "DESC"]],
-      include: UserModel
+      include: UserModel,
     });
     return res.status(201).send(foundVehicles);
   } catch (e: any) {
@@ -46,12 +48,11 @@ export const readVehicles = async (req: Request, res: Response) => {
 export const updateVehicle = async (req: Request, res: Response) => {
   const { id } = req.body;
   try {
-    const foundVehicle = await VehicleModel.findByPk(id)
+    const foundVehicle = await VehicleModel.findByPk(id);
     if (foundVehicle) {
-
       const user = getUser(req);
-      if(!user || user.id !== foundVehicle.UserId){
-        return res.status(403).send('Unauthorized');
+      if (!user || user.id !== foundVehicle.UserId) {
+        return res.status(403).send("Unauthorized");
       }
 
       foundVehicle.changed("updatedAt", true);
@@ -73,8 +74,8 @@ export const deleteVehicle = async (req: Request, res: Response) => {
     const foundVehicle = await VehicleModel.findByPk(id);
     if (foundVehicle) {
       const user = getUser(req);
-      if(!user || user.id !== foundVehicle.UserId){
-        return res.status(403).send('Unauthorized');
+      if (!user || user.id !== foundVehicle.UserId) {
+        return res.status(403).send("Unauthorized");
       }
     }
 
@@ -125,8 +126,8 @@ export const searchVehicles2 = async (req: Request, res: Response) => {
 export const searchVehicles = async (req: Request, res: Response) => {
   try {
     // TODO handle errors
-    const { offset, limit, key } = req.body;
- 
+    const { offset, limit, key } = req.query;
+
     const query = `
     SELECT * FROM (select * from public."Vehicles" where "regNo" like '%${key}%' or "chassis" like '%${key}%') V
     LEFT JOIN 
@@ -138,11 +139,10 @@ export const searchVehicles = async (req: Request, res: Response) => {
     ORDER BY "createdAt" DESC
     offset ${offset}
     limit ${limit}
-    `
+    `;
 
     const [results, metadata] = await DB.getInstance().query(query);
 
-    
     return res.status(201).send(results);
   } catch (e: any) {
     console.error(e);
@@ -152,22 +152,21 @@ export const searchVehicles = async (req: Request, res: Response) => {
 
 export const allVehicles = async (req: Request, res: Response) => {
   try {
-    const { offset, limit } = req.body;
+    const { offset, limit } = req.query;
     const user = getUser(req);
-    if(user?.id !== config.adminUserId){
-      return res.status(403).send('Unauthorized');
+    if (user?.id !== config.adminUserId) {
+      return res.status(403).send("Unauthorized");
     }
 
     const foundUsers = await VehicleModel.findAll({
       order: [["createdAt", "DESC"]],
-      offset,
-      limit,
+      offset: Number(offset),
+      limit: Number(limit),
     });
 
     return res.status(201).send(foundUsers);
-  }
-  catch (e: any) {
+  } catch (e: any) {
     console.error(e);
     return res.status(500).send(e.message);
   }
-}
+};

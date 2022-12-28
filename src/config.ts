@@ -15,7 +15,7 @@ export const config = {
   resetPasswordTimeout: 120 * 1000,
 
   localFEUrl: "http://localhost:3000",
-  prodFEUrl: "https://red-field-0788c2100.2.azurestaticapps.net",
+  prodFEUrl: "https://malindakpt.github.io/2200cc-fe",
 
   dbLogger: false,
   fromEmail: "malindakpt@gmail.com",

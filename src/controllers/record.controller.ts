@@ -32,19 +32,19 @@ export const readRecord = async (req: Request, res: Response) => {
 export const readRecords = async (req: Request, res: Response) => {
   try {
     // TODO handle errors
-    const { offset, limit, VehicleId, recordTypes } = req.body;
+    const { offset, limit, VehicleId, recordTypes } = req.query;
     const where = { 
       VehicleId,
       type: {
-        [Op.or]: recordTypes
+        [Op.or]: recordTypes === '' ? [] : recordTypes?.toString().split(',')
       }
      };
 
     const foundRecords = await RecordModel.findAll({
       where,
       order: [["date", "DESC"]],
-      offset,
-      limit,
+      offset: Number(offset),
+      limit: Number(limit),
       
     });
     return res.status(201).send(foundRecords);
@@ -100,7 +100,7 @@ export const deleteRecord = async (req: Request, res: Response) => {
 
 export const allRecords = async (req: Request, res: Response) => {
   try {
-    const { offset, limit } = req.body;
+    const { offset, limit } = req.query;
     const user = getUser(req);
     if(user?.id !== config.adminUserId){
       return res.status(403).send('Unauthorized');
@@ -108,8 +108,8 @@ export const allRecords = async (req: Request, res: Response) => {
 
     const foundUsers = await RecordModel.findAll({
       order: [["createdAt", "DESC"]],
-      offset,
-      limit,
+      offset: Number(offset),
+      limit: Number(limit),
     });
 
     return res.status(201).send(foundUsers);
@@ -123,7 +123,7 @@ export const allRecords = async (req: Request, res: Response) => {
 export const searchRecords = async (req: Request, res: Response) => {
   try {
     // TODO handle errors
-    const { offset, limit, regNo, chassis, recordTypes } = req.body;
+    const { offset, limit, regNo, chassis, recordTypes } = req.query;
 
     const foundVehicles = await RecordModel.findAll({
       where: {
@@ -136,8 +136,8 @@ export const searchRecords = async (req: Request, res: Response) => {
           }
       },
       order: [["date", "DESC"]],
-      offset,
-      limit,
+      offset: Number(offset),
+      limit: Number(limit),
       include: [{
         model: VehicleModel,
         as: 'Vehicle'

@@ -1,12 +1,13 @@
 import { Application } from "express";
 import { signUp, signIn, refreshToken, logout, sendResetCode, changePassword, loggedInUser, allUsers, updateUser } from "../controllers/users.controller";
+import { addCacheHeaders } from "../middlewares/cache.middleware";
 
 export const setUserRoutes = (app: Application) => {
     app.post('/user/signUp', [signUp]);
     app.post('/user/signIn', [signIn]);
     app.post('/user/update', [updateUser]);
-    app.post('/user/refreshToken', [refreshToken]);
-    app.post('/user/loggedInUser', [loggedInUser]);
+    app.get('/user/refreshToken', [refreshToken]);
+    app.get('/user/loggedInUser', [addCacheHeaders, loggedInUser]);
     app.post('/user/logout', [logout]);
     app.post('/user/all', [allUsers]);
     app.post('/user/sendResetCode', [sendResetCode]);
