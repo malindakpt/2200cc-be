@@ -15,7 +15,7 @@ export const config = {
   resetPasswordTimeout: 120 * 1000,
 
   localFEUrl: "http://localhost:3000",
-  prodFEUrl: "https://malindakpt.github.io/2200cc-fe",
+  prodFEUrl: "https://malindakpt.github.io",
 
   dbLogger: false,
   fromEmail: "malindakpt@gmail.com",
