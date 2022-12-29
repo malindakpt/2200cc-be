@@ -15,7 +15,7 @@ export const config = {
   resetPasswordTimeout: 120 * 1000,
 
   localFEUrl: "http://localhost:3000",
-  prodFEUrl: "https://rimcup-ff66e.web.app",
+  prodFEUrl: "https://rimcup-ff66e.firebaseapp.com",
 
   dbLogger: false,
   fromEmail: "malindakpt@gmail.com",
