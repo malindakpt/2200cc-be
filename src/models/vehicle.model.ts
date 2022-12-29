@@ -45,9 +45,10 @@ export const attributes = {
     allowNull: false,
   },
   fuel: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.NUMBER,
     allowNull: false
   },
+  fuelPrice: DataTypes.FLOAT,
   cc: {
     type: DataTypes.INTEGER,
     allowNull: false

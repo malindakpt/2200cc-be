@@ -47,8 +47,9 @@ export const attributes = {
   },
   country: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
+  extraProps: DataTypes.STRING,
   refreshToken: {
     type: DataTypes.TEXT,
     allowNull: true
