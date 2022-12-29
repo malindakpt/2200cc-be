@@ -62,6 +62,8 @@ export const attributes = {
   },
   hidden: DataTypes.BOOLEAN,
   images: DataTypes.STRING,
+  extraProps: DataTypes.STRING,
+  
   UserId: DataTypes.INTEGER,
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE

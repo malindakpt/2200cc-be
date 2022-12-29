@@ -49,6 +49,7 @@ export const attributes = {
     allowNull: false,
   },
   images: DataTypes.STRING,
+  extraProps: DataTypes.STRING,
 
   UserId: DataTypes.INTEGER,
   createdAt: DataTypes.DATE,
