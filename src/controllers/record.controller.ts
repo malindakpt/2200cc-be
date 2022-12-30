@@ -132,7 +132,7 @@ export const searchRecords = async (req: Request, res: Response) => {
             {  '$Vehicle.chassis$': chassis}
           ],
           type: {
-            [Op.or]: recordTypes
+            [Op.or]: recordTypes === '' ? [] : recordTypes?.toString().split(',')
           }
       },
       order: [["date", "DESC"]],
