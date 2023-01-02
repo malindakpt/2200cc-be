@@ -26,6 +26,7 @@ export const attributes = {
     type: DataTypes.STRING,
     allowNull: false
   },
+  type: DataTypes.INTEGER,
   name: {
     type: DataTypes.STRING,
     allowNull: false
