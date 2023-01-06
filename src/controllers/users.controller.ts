@@ -17,15 +17,19 @@ export const signUp = async (req: Request, res: Response) => {
     const foundUser = await UserModel.findOne({
       where: { identifier },
     });
-    if(foundUser) {
-      return res.status(409).send('User already exist with the email or phone number you provided');
+    if (foundUser) {
+      return res
+        .status(409)
+        .send({
+          error:
+            "User already exist with the email or phone number you provided",
+        });
     }
-
     const hash = await bcrypt.hash(password, 10);
     req.body.password = hash;
     const createdUser = await UserModel.create(req.body);
     const responseData = removeSensitiveData(createdUser);
-    const {refreshToken} = setCookies(responseData, res);
+    const { refreshToken } = setCookies(responseData, res);
 
     await createdUser.update({ refreshToken });
 
@@ -63,14 +67,25 @@ export const signIn = async (req: Request, res: Response) => {
 };
 
 export const updateUser = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { id, country, email, name, phone } = req.body;
   try {
     const foundUser = await UserModel.findOne({
       where: { id },
     });
     if (foundUser) {
-      foundUser.changed('updatedAt', true); // to forcefully update the timestamp
-      const updated = await foundUser.update(req.body);
+      foundUser.changed("updatedAt", true); // to forcefully update the timestamp
+
+      const updatedInfo: Omit<
+        User,
+        "id" | "password" | "refreshToken" | "identifier"
+      > = {
+        country,
+        email,
+        name,
+        phone,
+      };
+
+      const updated = await foundUser.update(updatedInfo);
       return res.status(201).send(updated);
     } else {
       return res.status(404).send({});
@@ -85,8 +100,8 @@ export const allUsers = async (req: Request, res: Response) => {
   try {
     const { offset, limit } = req.body;
     const user = getUser(req);
-    if(user?.id !== config.adminUserId){
-      return res.status(403).send('Unauthorized');
+    if (user?.id !== config.adminUserId) {
+      return res.status(403).send("Unauthorized");
     }
 
     const foundUsers = await UserModel.findAll({
@@ -96,12 +111,11 @@ export const allUsers = async (req: Request, res: Response) => {
     });
 
     return res.status(201).send(foundUsers);
-  }
-  catch (e: any) {
+  } catch (e: any) {
     console.error(e);
     return res.status(500).send(e.message);
   }
-}
+};
 
 export const refreshToken = async (req: Request, res: Response) => {
   try {
@@ -111,10 +125,7 @@ export const refreshToken = async (req: Request, res: Response) => {
       return res.status(401).send("Refresh token not found");
     }
 
-    const decodedUser = verify(
-      refreshToken,
-      config.refreshTokenSecret
-    ) as User;
+    const decodedUser = verify(refreshToken, config.refreshTokenSecret) as User;
 
     const foundUser = await UserModel.findOne({
       where: { refreshToken },
@@ -123,7 +134,7 @@ export const refreshToken = async (req: Request, res: Response) => {
     // if refresh-token reuse or hacked
     // TODO: invalidate other sessions
     if (!foundUser) {
-      console.log('old', refreshToken);
+      console.log("old", refreshToken);
       return res.status(401).send("User not found");
     }
 
@@ -135,7 +146,7 @@ export const refreshToken = async (req: Request, res: Response) => {
 
     const { refreshToken: newRefreshToken } = setCookies(responseData, res);
     await foundUser.update({ refreshToken: newRefreshToken });
-    console.log('new', newRefreshToken);
+    console.log("new", newRefreshToken);
     return res.status(200).send(responseData);
   } catch (e: any) {
     console.error(e);
@@ -163,7 +174,7 @@ export const loggedInUser = async (req: Request, res: Response) => {
 
     const responseData = removeSensitiveData(foundUser);
     // setCookies(responseData, res);
-    
+
     return res.status(200).send(responseData);
   } catch (e: any) {
     console.error(e);
