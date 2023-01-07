@@ -8,6 +8,7 @@ export class VehicleModel extends Model<InferAttributes<VehicleModel>, InferCrea
   declare id: CreationOptional<number>;
   declare regNo: string;
   declare millage: number;
+  declare brand: number;
   declare images: string;
   declare createdAt?: Date;
   declare updatedAt?: Date;

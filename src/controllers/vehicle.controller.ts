@@ -4,7 +4,6 @@ import { VehicleModel } from "../models/vehicle.model";
 import { Op } from "sequelize";
 import { getUser } from "../util/helper";
 import { config } from "../config";
-import { RecordModel } from "../models/record.model";
 import { DB } from "../services/db.connection";
 
 export const createVehicle = async (req: Request, res: Response) => {
@@ -37,6 +36,19 @@ export const readVehicles = async (req: Request, res: Response) => {
       where: { UserId: Number(UserId) },
       order: [["updatedAt", "DESC"]],
       include: UserModel,
+    });
+    return res.status(201).send(foundVehicles);
+  } catch (e: any) {
+    console.error(e);
+    return res.status(500).send(e.message);
+  }
+};
+
+export const readNewVehicleBrands = async (req: Request, res: Response) => {
+  try {
+    const foundVehicles = await VehicleModel.findAll({
+      where: { brand: -1 },
+      order: [["updatedAt", "DESC"]],
     });
     return res.status(201).send(foundVehicles);
   } catch (e: any) {
