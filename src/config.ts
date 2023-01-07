@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 export const config = {
-  adminUserId: 1,
+  adminUserId: 19,
   isDev: process.env.IS_DEV == 'true',
   accessTokenSecret: process.env.ACCESS_TOKEN_SECRET ?? "1111",
   refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET ?? "2222",
