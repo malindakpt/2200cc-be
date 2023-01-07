@@ -1,3 +1,4 @@
+import { MetaModel } from "./models/meta.model";
 import { RecordModel } from "./models/record.model";
 import { UserModel } from "./models/user.model";
 import { VehicleModel } from "./models/vehicle.model";
@@ -14,6 +15,7 @@ export const syncDatabase = async () => {
     await UserModel.sync();
     await VehicleModel.sync();
     await RecordModel.sync();
+    await MetaModel.sync();
     
     console.log(
       "------------- DB Connected -------------"

@@ -9,6 +9,7 @@ import cookies from "cookie-parser";
 import { setRecordRoutes } from "../routes/record.routes";
 import { setVehicleRoutes } from "../routes/vehicle.routes";
 import { validateToken } from "../middlewares/token.middleware";
+import { setMetaRoutes } from "../routes/meta.routes";
 
 const app = express();
 console.log(config.isDev? 'Development setup' : 'Production Setup');
@@ -30,6 +31,7 @@ app.use(validateToken);
 setUserRoutes(app);
 setRecordRoutes(app);
 setVehicleRoutes(app);
+setMetaRoutes(app);
 
 app.get("/", (req, res) => {
   res.status(200).send(`<h3>App is working: ${packageJson.version} on ${new Date().toString()}</h3>`);
