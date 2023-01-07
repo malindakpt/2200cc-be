@@ -29,7 +29,10 @@ export const attributes = {
     primaryKey: true,
   },
   cat: DataTypes.INTEGER,
-  label: DataTypes.STRING,
+  label: {
+    type: DataTypes.STRING,
+    primaryKey: true,
+  },
  
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE,
