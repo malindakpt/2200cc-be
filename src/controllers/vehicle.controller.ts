@@ -63,7 +63,8 @@ export const updateVehicle = async (req: Request, res: Response) => {
     const foundVehicle = await VehicleModel.findByPk(id);
     if (foundVehicle) {
       const user = getUser(req);
-      if (!user || user.id !== foundVehicle.UserId) {
+
+      if (user?.id !== config.adminUserId && (!user || user.id !== foundVehicle.UserId)) {
         return res.status(403).send("Unauthorized");
       }
 
