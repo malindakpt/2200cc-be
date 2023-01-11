@@ -10,8 +10,9 @@ export const config = {
   userTokenSecret: process.env.USER_TOKEN_SECRET ?? "3333",
 
   dbPassword: process.env.DB_PASSWORD,
-  accessTokenValidity: 10,
-  refreshTokenValidity: 60 * 60 * 24 * 2,
+  cacheTimeout: 60 * 60 * 24 * 3,
+  accessTokenValidity: 60 * 60 * 24 * 1,
+  refreshTokenValidity: 60 * 60 * 24 * 5,
   resetPasswordTimeout: 120 * 1000,
 
   localFEUrl: "http://localhost:3000",
